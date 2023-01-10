@@ -1,11 +1,20 @@
 package ru.netology.cloudstorage.service;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
+import ru.netology.cloudstorage.model.entity.User.User;
 
-/**
- *
- */
-public interface UserService extends UserDetailsService {
+import java.util.List;
+
+public interface UserService {
+
+    User register(User user);
+
+    List<User> getAll();
+
+    User findByUserName(String userName);
+
+    User findById(Long id);
+
+    void delete(Long id);
 
 
 }
