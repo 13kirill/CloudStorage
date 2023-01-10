@@ -2,7 +2,7 @@ package ru.netology.cloudstorage.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.netology.cloudstorage.model.entity.User;
+import ru.netology.cloudstorage.model.entity.User.User;
 import ru.netology.cloudstorage.repository.UserRepository;
 import ru.netology.cloudstorage.service.UserContextHolderService;
 
@@ -15,7 +15,7 @@ public class UserContextHolderServiceImpl implements UserContextHolderService {
     public User getCurrentUserContext() {
         return userRepository.findByName("test").orElseGet(() -> {
             User user = new User();
-            user.setName("test");
+            user.setUserName("test");
             user.setPassword("test");
             return userRepository.save(user);
         });
