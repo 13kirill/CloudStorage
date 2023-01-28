@@ -18,11 +18,8 @@ public final class JwtUserFactory {
     public static JwtUser create(User user) {
         return new JwtUser(
                 user.getId(),
-                user.getUserName(),
-                user.getFirstName(),
-                user.getLastName(),
+                user.getUsername(),
                 user.getPassword(),
-                user.getEmail(),
                 user.getStatus().equals(Status.ACTIVE),
                 mapToGrantedAuthorities(new ArrayList<>(user.getRoles())),
                 user.getUpdated()

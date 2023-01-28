@@ -16,7 +16,7 @@ public class UserDTO {
     public User toUser(){
         User user = new User();
         user.setId(id);
-        user.setUserName(username);
+        user.setUsername(username);
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setEmail(email);
@@ -27,7 +27,7 @@ public class UserDTO {
     public static UserDTO fromUser(User user) {
         UserDTO userDto = new UserDTO();
         userDto.setId(user.getId());
-        userDto.setUsername(user.getUserName());
+        userDto.setUsername(user.getUsername());
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
         userDto.setEmail(user.getEmail());

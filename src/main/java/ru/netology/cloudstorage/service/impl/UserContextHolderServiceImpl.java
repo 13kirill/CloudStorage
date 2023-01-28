@@ -15,7 +15,7 @@ public class UserContextHolderServiceImpl implements UserContextHolderService {
     public User getCurrentUserContext() {
         return userRepository.findByName("test").orElseGet(() -> {
             User user = new User();
-            user.setUserName("test");
+            user.setUsername("test");
             user.setPassword("test");
             return userRepository.save(user);
         });

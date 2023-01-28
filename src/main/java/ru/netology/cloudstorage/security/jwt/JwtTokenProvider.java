@@ -14,10 +14,7 @@ import ru.netology.cloudstorage.model.entity.User.Role;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class JwtTokenProvider {
@@ -66,9 +63,21 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest req) {
-        String bearerToken = req.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer_")) {
-            return bearerToken.substring(7, bearerToken.length());
+        String bearerToken = req.getHeader("auth-token");
+        String header = req.getHeader("Referer");
+
+        System.out.println("bearerToken: " + bearerToken);
+        System.out.println(header);
+        Enumeration<String> headerNames = req.getHeaderNames();
+
+        if (headerNames != null) {
+            while (headerNames.hasMoreElements()) {
+                System.out.println("Header: " + req.getHeader(headerNames.nextElement()));
+            }
+        }
+
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
         }
         return null;
     }

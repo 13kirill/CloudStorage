@@ -4,14 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.netology.cloudstorage.model.entity.User.Role;
-import ru.netology.cloudstorage.model.entity.User.Status;
+import ru.netology.cloudstorage.exceptions.ClientException;
+import ru.netology.cloudstorage.model.DTO.LoginRequestDTO;
 import ru.netology.cloudstorage.model.entity.User.User;
 import ru.netology.cloudstorage.repository.RoleRepository;
 import ru.netology.cloudstorage.repository.UserRepository;
 import ru.netology.cloudstorage.service.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,14 +29,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(User user) {
-        Role roleUser = roleRepository.findByName("ROLE_USER");
-        List<Role> userRoles = new ArrayList<>();
-        userRoles.add(roleUser);
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(userRoles);
-        user.setStatus(Status.ACTIVE);
+    public User register(LoginRequestDTO loginRequestDTO) {
+        if (userRepository.findByUsername(loginRequestDTO.getLogin()) == null) {
+            throw new ClientException("Error create user account: Incorrect user name, user with such name already exists");
+        }
+        String encodedPassword = passwordEncoder.encode(loginRequestDTO.getPassword());
+        User user = new User();
+        user.setUsername(loginRequestDTO.getLogin());
+        user.setPassword(encodedPassword);
 
         User registeredUser = userRepository.save(user);
 
@@ -45,6 +44,23 @@ public class UserServiceImpl implements UserService {
 
         return registeredUser;
     }
+
+//    @Override
+//    public User register(User user) {
+//        Role roleUser = roleRepository.findByName("ROLE_USER");
+//        List<Role> userRoles = new ArrayList<>();
+//        userRoles.add(roleUser);
+//
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        user.setRoles(userRoles);
+//        user.setStatus(Status.ACTIVE);
+//
+//        User registeredUser = userRepository.save(user);
+//
+//        log.info("IN register - user: {} successfully registered", registeredUser);
+//
+//        return registeredUser;
+//    }
 
     @Override
     public List<User> getAll() {
@@ -55,7 +71,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUserName(String username) {
-        User result = userRepository.findByUserName(username);
+        User result = userRepository.findByUsername(username);
         log.info("IN findByUsername - user: {} found by username: {}", result, username);
         return result;
     }

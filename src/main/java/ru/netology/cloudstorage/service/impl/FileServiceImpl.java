@@ -3,6 +3,7 @@ package ru.netology.cloudstorage.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -10,6 +11,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 import ru.netology.cloudstorage.exceptions.ClientException;
 import ru.netology.cloudstorage.exceptions.ServerException;
+import ru.netology.cloudstorage.model.DTO.FileDTO;
 import ru.netology.cloudstorage.model.entity.StoredFile;
 import ru.netology.cloudstorage.model.entity.User.User;
 import ru.netology.cloudstorage.repository.FileRepository;
@@ -85,5 +87,20 @@ public class FileServiceImpl implements FileService {
         StoredFile storedFile = fileRepository.findByFileName(fileName1)
                 .orElseThrow(EntityNotFoundException::new);
         storedFile.setFileName(fileName2);
+    }
+
+    @Override
+    public List<FileDTO> getInfoAboutAllFiles(int limit) {
+        User user = getCurrentUser();
+        List<FileDTO> files = fileRepository.findAllByUser(user);
+        if (files.size() <= limit) {
+            return files;
+        } else {
+            return files.subList(0, limit);
+        }
+    }
+
+    public User getCurrentUser() {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }
