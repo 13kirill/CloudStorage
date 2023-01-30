@@ -11,7 +11,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 import ru.netology.cloudstorage.exceptions.ClientException;
 import ru.netology.cloudstorage.exceptions.ServerException;
-import ru.netology.cloudstorage.model.DTO.FileDTO;
+import ru.netology.cloudstorage.model.DTO.StoredFileDto;
 import ru.netology.cloudstorage.model.entity.StoredFile;
 import ru.netology.cloudstorage.model.entity.User.User;
 import ru.netology.cloudstorage.repository.FileRepository;
@@ -36,14 +36,14 @@ public class FileServiceImpl implements FileService {
     @Override
     @Transactional
     public void deleteFile(String fileName) {
-        StoredFile storedFile = fileRepository.findByFileName(fileName)
+        StoredFile storedFile = fileRepository.findByFilename(fileName)
                 .orElseThrow(EntityNotFoundException::new);
         fileRepository.delete(storedFile);
         fileStorageService.deleteFile(storedFile.getFileUUID());
     }
 
     @Override
-    public void uploadFile(String fileName, MultipartFile multipartFile) {
+    public void uploadFile(String filename, MultipartFile multipartFile) {
         String uuid = fileStorageService.saveFile(multipartFile);
         File file = fileStorageService.getFile(uuid);
         String hash;
@@ -52,7 +52,7 @@ public class FileServiceImpl implements FileService {
             currentUser = userContextHolderService.getCurrentUserContext();
             hash = fileHashingService.getHash(file);
             StoredFile storedFile = StoredFile.builder()
-                    .fileName(fileName)
+                    .filename(filename)
                     .user(currentUser)
                     .hash(hash)
                     .fileUUID(uuid)
@@ -66,9 +66,9 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public MultiValueMap<String, Object> downloadFile(String fileName) {
+    public MultiValueMap<String, Object> downloadFile(String filename) {
         //todo проверяем есть ли у пользователя право смотреть файл
-        StoredFile storedFile = fileRepository.findByFileName(fileName).orElseThrow(() -> new ClientException("Файл не найден"));
+        StoredFile storedFile = fileRepository.findByFilename(filename).orElseThrow(() -> new ClientException("Файл не найден"));
         File file = fileStorageService.getFile(storedFile.getFileUUID());
         String hash = fileHashingService.getHash(file);
         if(!storedFile.getHash().equals(hash)){
@@ -83,16 +83,16 @@ public class FileServiceImpl implements FileService {
 
     @Transactional
     @Override
-    public void editFileName(String fileName1, String fileName2) {
-        StoredFile storedFile = fileRepository.findByFileName(fileName1)
+    public void editFilename(String filename1, String filename2) {
+        StoredFile storedFile = fileRepository.findByFilename(filename1)
                 .orElseThrow(EntityNotFoundException::new);
-        storedFile.setFileName(fileName2);
+        storedFile.setFilename(filename2);
     }
 
     @Override
-    public List<FileDTO> getInfoAboutAllFiles(int limit) {
+    public List<StoredFileDto> getInfoAboutAllFiles(int limit) {
         User user = getCurrentUser();
-        List<FileDTO> files = fileRepository.findAllByUser(user);
+        List<StoredFileDto> files = fileRepository.findAllByUser(user);
         if (files.size() <= limit) {
             return files;
         } else {
@@ -101,6 +101,7 @@ public class FileServiceImpl implements FileService {
     }
 
     public User getCurrentUser() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return user;
     }
 }

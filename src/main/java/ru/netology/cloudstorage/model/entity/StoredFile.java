@@ -21,7 +21,7 @@ public class StoredFile {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String fileName;
+    private String filename;
 
     @Column (nullable = false)
     private long size;

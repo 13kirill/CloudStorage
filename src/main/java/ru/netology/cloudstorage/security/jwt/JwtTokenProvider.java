@@ -63,18 +63,9 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest req) {
-        String bearerToken = req.getHeader("auth-token");
-        String header = req.getHeader("Referer");
+        final String bearerToken = req.getHeader("auth-token");
 
         System.out.println("bearerToken: " + bearerToken);
-        System.out.println(header);
-        Enumeration<String> headerNames = req.getHeaderNames();
-
-        if (headerNames != null) {
-            while (headerNames.hasMoreElements()) {
-                System.out.println("Header: " + req.getHeader(headerNames.nextElement()));
-            }
-        }
 
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
