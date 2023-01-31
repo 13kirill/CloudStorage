@@ -4,6 +4,7 @@ import ru.netology.cloudstorage.model.DTO.LoginRequestDTO;
 import ru.netology.cloudstorage.model.entity.User.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -13,7 +14,7 @@ public interface UserService {
 
     List<User> getAll();
 
-    User findByUserName(String userName);
+    User findByUsername(String userName);
 
     User findById(Long id);
 

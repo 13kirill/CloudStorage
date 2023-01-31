@@ -2,33 +2,38 @@ package ru.netology.cloudstorage.security.jwt;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 public class JwtUser implements UserDetails {
 
     private final Long id;
     private final String username;
     private final String password;
-    private final boolean enabled;
-    private final Date lastPasswordResetDate;
-    private final Collection<? extends GrantedAuthority> authorities;
+    private String role;
 
-    public JwtUser(Long id, String username, String password,
-                   boolean enabled, Collection<? extends GrantedAuthority> authorities, Date lastPasswordResetDate) {
+    public JwtUser(Long id, String username, String password, String role) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.enabled = enabled;
-        this.authorities = authorities;
-        this.lastPasswordResetDate = lastPasswordResetDate;
+        this.role = role;
     }
 
-    @JsonIgnore
-    public Long getId() {
-        return id;
+    @Override
+    public List<GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> list = new ArrayList<>();
+        list.add(new SimpleGrantedAuthority(role));
+        return list;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     @Override
@@ -36,42 +41,23 @@ public class JwtUser implements UserDetails {
         return username;
     }
 
-    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @JsonIgnore
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return false;
     }
 
     @Override
     public boolean isEnabled() {
-        return enabled;
-    }
-
-    @JsonIgnore
-    public Date getLastPasswordResetDate() {
-        return lastPasswordResetDate;
+        return true;
     }
 }

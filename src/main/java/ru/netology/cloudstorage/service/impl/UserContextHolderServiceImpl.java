@@ -13,7 +13,7 @@ public class UserContextHolderServiceImpl implements UserContextHolderService {
     private final UserRepository userRepository;
     @Override
     public User getCurrentUserContext() {
-        return userRepository.findByName("test").orElseGet(() -> {
+        return userRepository.findByUsername("test").orElseGet(() -> {
             User user = new User();
             user.setUsername("test");
             user.setPassword("test");

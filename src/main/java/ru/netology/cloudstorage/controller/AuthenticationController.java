@@ -18,6 +18,7 @@ import ru.netology.cloudstorage.service.UserService;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 public class AuthenticationController {
@@ -40,13 +41,13 @@ public class AuthenticationController {
         try {
             String username = requestDto.getLogin();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
-            User user = userService.findByUserName(username);
+            User user = userService.findByUsername(username);
 
             if (user == null) {
                 throw new UsernameNotFoundException("User with username: " + username + " not found");
             }
 
-            String authToken = jwtTokenProvider.createToken(username, user.getRoles());
+            String authToken = jwtTokenProvider.createToken(username);
 
             Map<Object, Object> response = new HashMap<>();
             response.put("username", username);

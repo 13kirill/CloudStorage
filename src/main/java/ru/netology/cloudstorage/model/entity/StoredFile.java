@@ -13,9 +13,6 @@ import javax.persistence.*;
 @Builder
 public class StoredFile {
 
-    @ManyToOne(optional = false)
-    private User user;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,4 +28,8 @@ public class StoredFile {
 
     @Column (nullable = false)
     private String fileUUID;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

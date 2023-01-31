@@ -1,6 +1,7 @@
 package ru.netology.cloudstorage.model.entity.User;
 
 import lombok.Data;
+import ru.netology.cloudstorage.model.entity.StoredFile;
 
 import javax.persistence.*;
 import java.util.List;
@@ -8,29 +9,23 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Data
-public class User extends BaseEntity {
+public class User {
 
-    @Column(name = "username")
-    private String username;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(unique = true, nullable = false)
+    protected String username;
 
-    @Column(name = "first_name")
-    private String firstName;
+    @Column(nullable = false)
+    protected String password;
 
-    @Column(name = "last_name")
-    private String lastName;
+    @Column(nullable = false)
+    protected String role;
 
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "password")
-    private String password;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
-    private List<Role> roles;
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "user",
+            cascade = CascadeType.ALL)
+    protected List<StoredFile> storedFiles;
 }
