@@ -38,9 +38,7 @@ public class JwtTokenProvider {
     }
 
     public String createToken(String username) {
-//        Claims claims = Jwts.claims().setSubject(userName);
-//        claims.put("roles", getRoleNames(roleList));
-//
+
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
@@ -51,11 +49,7 @@ public class JwtTokenProvider {
                 .setExpiration(validity)
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
-//                .setClaims(claims)
-//                .setIssuedAt(now)
-//                .setExpiration(validity)
-//                .signWith(SignatureAlgorithm.HS256, secret)
-//                .compact();
+
     }
 
     public Authentication getAuthentication(String token) {
