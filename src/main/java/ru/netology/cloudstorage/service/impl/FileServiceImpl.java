@@ -31,7 +31,7 @@ public class FileServiceImpl implements FileService {
     private final FileRepository fileRepository;
     private final FileStorageService fileStorageService;
     private final FileHashingService fileHashingService;
-    private final UserContextHolderService userContextHolderService;
+    //private final UserContextHolderService userContextHolderService;
 
     @Override
     @Transactional
@@ -49,7 +49,7 @@ public class FileServiceImpl implements FileService {
         String hash;
         User currentUser;
         try {
-            currentUser = userContextHolderService.getCurrentUserContext();
+            currentUser = getCurrentUser();
             hash = fileHashingService.getHash(file);
             StoredFile storedFile = StoredFile.builder()
                     .filename(filename)

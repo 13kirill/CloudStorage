@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(LOGIN_ENDPOINT).permitAll()
                 .antMatchers(ADMIN_ENDPOINT).permitAll()
                 .antMatchers(HttpMethod.POST, "/signin").permitAll()
-                .antMatchers("/file", "/users/").authenticated()
+                .antMatchers("/file", "/users", "/list").authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));

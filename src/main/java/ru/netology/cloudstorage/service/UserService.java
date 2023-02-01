@@ -12,13 +12,15 @@ public interface UserService {
 
     User register(LoginRequestDTO loginRequestDTO);
 
-    List<User> getAll();
-
+//    List<User> getAll();
+//
     User findByUsername(String userName);
 
-    User findById(Long id);
-
-    void delete(Long id);
+    User findUserByUsername(String username);
+//
+//    User findById(Long id);
+//
+//    void delete(Long id);
 
 
 }

@@ -28,4 +28,13 @@ public class User {
             mappedBy = "user",
             cascade = CascadeType.ALL)
     protected List<StoredFile> storedFiles;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
+                '}';
+    }
 }
