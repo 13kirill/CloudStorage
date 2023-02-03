@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.netology.cloudstorage.model.entity.User.User;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,11 +18,18 @@ public class JwtUser implements UserDetails {
     private final String password;
     private String role;
 
-    public JwtUser(Long id, String username, String password, String role) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.role = role;
+    private User user;
+
+    public JwtUser(User user) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.role = user.getRole();
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     @Override

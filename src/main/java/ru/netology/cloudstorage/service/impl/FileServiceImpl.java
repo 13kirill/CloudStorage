@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -15,6 +16,7 @@ import ru.netology.cloudstorage.model.DTO.StoredFileDto;
 import ru.netology.cloudstorage.model.entity.StoredFile;
 import ru.netology.cloudstorage.model.entity.User.User;
 import ru.netology.cloudstorage.repository.FileRepository;
+import ru.netology.cloudstorage.security.jwt.JwtUser;
 import ru.netology.cloudstorage.service.FileHashingService;
 import ru.netology.cloudstorage.service.FileService;
 import ru.netology.cloudstorage.service.FileStorageService;
@@ -71,7 +73,7 @@ public class FileServiceImpl implements FileService {
         StoredFile storedFile = fileRepository.findByFilename(filename).orElseThrow(() -> new ClientException("Файл не найден"));
         File file = fileStorageService.getFile(storedFile.getFileUUID());
         String hash = fileHashingService.getHash(file);
-        if(!storedFile.getHash().equals(hash)){
+        if (!storedFile.getHash().equals(hash)) {
             throw new ClientException("Файл был изменён");
         }
         Resource resource = fileStorageService.getFileAsResource(storedFile.getFileUUID());
@@ -101,7 +103,7 @@ public class FileServiceImpl implements FileService {
     }
 
     public User getCurrentUser() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return user;
+        JwtUser jwtUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return jwtUser.getUser();
     }
 }

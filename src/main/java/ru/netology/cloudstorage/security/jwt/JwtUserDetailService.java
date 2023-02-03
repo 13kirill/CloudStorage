@@ -7,8 +7,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.netology.cloudstorage.model.entity.User.User;
-import ru.netology.cloudstorage.security.jwt.JwtUser;
-import ru.netology.cloudstorage.security.jwt.JwtUserFactory;
 import ru.netology.cloudstorage.service.UserService;
 
 @Service
@@ -30,7 +28,7 @@ public class JwtUserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("User with username: " + userName + " not found");
         }
 
-        JwtUser jwtUser = JwtUserFactory.create(user);
+        JwtUser jwtUser = new JwtUser(user);
         log.info("IN loadByUserName - user with username: {} successfully loaded", userName);
         return jwtUser;
     }
