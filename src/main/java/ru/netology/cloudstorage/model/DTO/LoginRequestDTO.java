@@ -1,12 +1,13 @@
 package ru.netology.cloudstorage.model.DTO;
 
 import com.sun.istack.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.validation.annotation.Validated;
 
-@Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Validated
 public class LoginRequestDTO {
 
     private String login;

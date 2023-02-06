@@ -10,14 +10,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import ru.netology.cloudstorage.model.entity.User.Role;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class JwtTokenProvider {
@@ -37,23 +33,24 @@ public class JwtTokenProvider {
     }
 
     @PostConstruct
-    protected void init(){
+    protected void init() {
         secret = Base64.getEncoder().encodeToString(secret.getBytes());
     }
 
-    public String createToken(String userName, List<Role> roleList) {
-        Claims claims = Jwts.claims().setSubject(userName);
-        claims.put("roles", getRoleNames(roleList));
+    public String createToken(String username) {
+
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()
-                .setClaims(claims)
+                //.claim("username", username)
+                .setSubject(username)
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
+
     }
 
     public Authentication getAuthentication(String token) {
@@ -66,9 +63,10 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest req) {
-        String bearerToken = req.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer_")) {
-            return bearerToken.substring(7, bearerToken.length());
+        final String bearerToken = req.getHeader("auth-token");
+
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
         }
         return null;
     }
@@ -87,11 +85,11 @@ public class JwtTokenProvider {
         }
     }
 
-    private List<String> getRoleNames(List<Role> roleList) {
-        List<String> result = new ArrayList<>();
-        roleList.forEach(role -> {
-            result.add(role.getName());
-        });
-        return result;
-    }
+//    private List<String> getRoleNames(List<Role> roleList) {
+//        List<String> result = new ArrayList<>();
+//        roleList.forEach(role -> {
+//            result.add(role.getName());
+//        });
+//        return result;
+//    }
 }

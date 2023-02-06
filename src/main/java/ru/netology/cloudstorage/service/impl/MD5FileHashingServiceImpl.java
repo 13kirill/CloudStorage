@@ -24,8 +24,7 @@ public class MD5FileHashingServiceImpl implements FileHashingService {
         try {
             md.update(Files.readAllBytes(file.toPath()));
         } catch (IOException e) {
-            throw new ServerException("TODO");
-            //Ошибка при попытке прочтения файла
+            throw new ServerException("Ошибка при попытке прочтения файла");
         }
         byte[] digest = md.digest();
         return DatatypeConverter.printHexBinary(digest).toUpperCase();

@@ -1,7 +1,6 @@
 package ru.netology.cloudstorage.model.entity;
 
 import lombok.*;
-import ru.netology.cloudstorage.model.entity.User.User;
 
 import javax.persistence.*;
 
@@ -13,15 +12,12 @@ import javax.persistence.*;
 @Builder
 public class StoredFile {
 
-    @ManyToOne(optional = false)
-    private User user;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String fileName;
+    private String filename;
 
     @Column (nullable = false)
     private long size;
@@ -31,4 +27,8 @@ public class StoredFile {
 
     @Column (nullable = false)
     private String fileUUID;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

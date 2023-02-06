@@ -6,7 +6,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EditFileNameRequestDTO {
+public class EditFilenameRequestDTO {
 
-    private String name;
+    private String filename;
 }

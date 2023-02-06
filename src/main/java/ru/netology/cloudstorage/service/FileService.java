@@ -3,8 +3,9 @@ package ru.netology.cloudstorage.service;
 import org.springframework.lang.NonNull;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
+import ru.netology.cloudstorage.model.DTO.StoredFileDto;
 
-import java.io.IOException;
+import java.util.List;
 
 /**
  * Данный интерфейс обеспечивает функционал работы с БД.
@@ -38,6 +39,7 @@ public interface FileService {
      * @param fileName    имя файла.
      * @param newFileName
      */
-    void editFileName(@NonNull String fileName, @NonNull String newFileName);
+    void editFilename(@NonNull String fileName, @NonNull String newFileName);
 
+    List<StoredFileDto> getInfoAboutAllFiles(int limit);
 }

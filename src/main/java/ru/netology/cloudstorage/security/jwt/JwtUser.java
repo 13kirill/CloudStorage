@@ -1,40 +1,44 @@
 package ru.netology.cloudstorage.security.jwt;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.netology.cloudstorage.model.entity.User;
 
-import java.util.Collection;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JwtUser implements UserDetails {
 
     private final Long id;
     private final String username;
-    private final String firstName;
-    private final String lastName;
     private final String password;
-    private final String email;
-    private final boolean enabled;
-    private final Date lastPasswordResetDate;
-    private final Collection<? extends GrantedAuthority> authorities;
+    private String role;
 
-    public JwtUser(Long id, String username, String firstName, String lastName, String password, String email,
-                   boolean enabled, Collection<? extends GrantedAuthority> authorities, Date lastPasswordResetDate) {
-        this.id = id;
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.password = password;
-        this.email = email;
-        this.enabled = enabled;
-        this.authorities = authorities;
-        this.lastPasswordResetDate = lastPasswordResetDate;
+    private User user;
+
+    public JwtUser(User user) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.role = user.getRole();
+        this.user = user;
     }
 
-    @JsonIgnore
-    public Long getId() {
-        return id;
+    public User getUser() {
+        return user;
+    }
+
+    @Override
+    public List<GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> list = new ArrayList<>();
+        list.add(new SimpleGrantedAuthority(role));
+        return list;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     @Override
@@ -42,54 +46,23 @@ public class JwtUser implements UserDetails {
         return username;
     }
 
-    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    @JsonIgnore
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
-
     @Override
     public boolean isEnabled() {
-        return enabled;
-    }
-
-    @JsonIgnore
-    public Date getLastPasswordResetDate() {
-        return lastPasswordResetDate;
+        return true;
     }
 }

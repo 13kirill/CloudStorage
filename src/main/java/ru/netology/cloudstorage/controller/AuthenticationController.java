@@ -5,22 +5,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ru.netology.cloudstorage.model.DTO.AuthenticationRequestDTO;
-import ru.netology.cloudstorage.model.entity.User.User;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.web.bind.annotation.*;
+import ru.netology.cloudstorage.model.DTO.LoginRequestDTO;
 import ru.netology.cloudstorage.security.jwt.JwtTokenProvider;
 import ru.netology.cloudstorage.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/auth/")
 public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
@@ -36,26 +35,40 @@ public class AuthenticationController {
         this.userService = userService;
     }
 
-    @PostMapping("login")
-    public ResponseEntity login(@RequestBody AuthenticationRequestDTO requestDto) {
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody LoginRequestDTO loginRequestDTO) {
         try {
-            String username = requestDto.getUsername();
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
-            User user = userService.findByUserName(username);
+            String username = loginRequestDTO.getLogin();
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, loginRequestDTO.getPassword()));
 
-            if (user == null) {
-                throw new UsernameNotFoundException("User with username: " + username + " not found");
-            }
-
-            String token = jwtTokenProvider.createToken(username, user.getRoles());
+            String authToken = jwtTokenProvider.createToken(username);
 
             Map<Object, Object> response = new HashMap<>();
             response.put("username", username);
-            response.put("token", token);
+            response.put("auth-token", authToken);
 
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid username or password");
         }
+    }
+
+//    @PostMapping("/logout")
+//    public ResponseEntity logout(@RequestHeader("auth-token") String authToken) {
+//        return (ResponseEntity) ResponseEntity.ok();
+//    }
+
+//    @RequestMapping(value="/logout", method = RequestMethod.POST)
+//    public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        if (auth != null){
+//            new SecurityContextLogoutHandler().logout(request, response, auth);
+//        }
+//        return "redirect:/login?logout"; //You can redirect wherever you want, but generally it's a good practice to show login screen again.
+//    }
+
+    @PostMapping("/logout")
+    public ResponseEntity logout() {
+        return ResponseEntity.ok("Success logout");
     }
 }
