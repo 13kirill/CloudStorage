@@ -54,8 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/file", "/list").authenticated()
                 .anyRequest().authenticated()
                 .and()
-              //  .logout((logout) -> logout.logoutSuccessUrl("/login"))
-               // .and()
+                .logout().logoutUrl("/logout")
+                .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));
     }
 
