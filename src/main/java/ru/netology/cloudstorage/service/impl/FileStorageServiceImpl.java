@@ -3,7 +3,6 @@ package ru.netology.cloudstorage.service.impl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.netology.cloudstorage.exceptions.ServerException;
@@ -14,7 +13,6 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,11 +32,9 @@ public class FileStorageServiceImpl implements FileStorageService {
         }
         if (!Files.isDirectory(path)) {
             throw new FileNotFoundException("Файл не является каталогом");
-            //TODO
         }
         if (!Files.isWritable(path)) {
             throw new FileNotFoundException("Файл не существует или не является исполняемымы файлом");
-            //TODO
         }
     }
 
@@ -54,10 +50,8 @@ public class FileStorageServiceImpl implements FileStorageService {
                 Files.deleteIfExists(Paths.get(fileStorageDir, uuid));
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
-                //TODO не получилось удалить файл
             }
             throw new RuntimeException(e);
-            //TODO не получилось сохранить файл
         }
         return uuid;
     }
@@ -69,7 +63,6 @@ public class FileStorageServiceImpl implements FileStorageService {
             Files.deleteIfExists(path);
         } catch (IOException e) {
             throw new RuntimeException(e);
-            //TODO не получилось удалить файл
         }
     }
 
@@ -94,15 +87,12 @@ public class FileStorageServiceImpl implements FileStorageService {
     protected void validateFile(Path path) {
         if (!Files.exists(path)) {
             throw new ServerException("Файл не существует.");
-            //TODO
         }
         if (!Files.isReadable(path)) {
             throw new ServerException("Файл не доступен для чтения");
-            //TODO
         }
         if (!Files.isRegularFile(path)) {
             throw new ServerException("Не является файлом с непрозрачным содержимым");
-            //TODO
         }
     }
 }

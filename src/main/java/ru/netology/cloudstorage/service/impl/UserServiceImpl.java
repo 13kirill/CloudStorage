@@ -6,7 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.netology.cloudstorage.exceptions.ClientException;
 import ru.netology.cloudstorage.model.DTO.LoginRequestDTO;
-import ru.netology.cloudstorage.model.entity.User.User;
+import ru.netology.cloudstorage.model.entity.User;
 import ru.netology.cloudstorage.repository.UserRepository;
 import ru.netology.cloudstorage.service.UserService;
 
@@ -15,15 +15,8 @@ import ru.netology.cloudstorage.service.UserService;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-//    private final RoleRepository roleRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
 
-//    @Autowired
-//    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
-//        this.userRepository = userRepository;
-//        this.roleRepository = roleRepository;
-//        this.passwordEncoder = passwordEncoder;
-//    }
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
@@ -48,13 +41,6 @@ public class UserServiceImpl implements UserService {
         return registeredUser;
     }
 
-//    @Override
-//    public List<User> getAll() {
-//        List<User> result = userRepository.findAll();
-//        log.info("IN getAll - {} users found", result.size());
-//        return result;
-//    }
-//
     @Override
     public User findByUsername(String username) {
         User result = userRepository.findByUsername(username).orElse(null);
@@ -68,23 +54,4 @@ public class UserServiceImpl implements UserService {
         log.info("IN findByUsername - user: {} found by username: {}", result, username);
         return result;
     }
-//
-//    @Override
-//    public User findById(Long id) {
-//        User result = userRepository.findById(id).orElse(null);
-//
-//        if (result == null) {
-//            log.warn("IN findById - no user found by id: {}", id);
-//            return null;
-//        }
-//
-//        log.info("IN findById - user: {} found by id: {}", result);
-//        return result;
-//    }
-//
-//    @Override
-//    public void delete(Long id) {
-//        userRepository.deleteById(id);
-//        log.info("IN delete - user with id: {} successfully deleted");
-//    }
 }

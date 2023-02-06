@@ -8,8 +8,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.authentication.logout.DelegatingServerLogoutHandler;
+import org.springframework.security.web.server.authentication.logout.SecurityContextServerLogoutHandler;
+import org.springframework.security.web.server.authentication.logout.WebSessionServerLogoutHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -45,10 +50,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(LOGIN_ENDPOINT).permitAll()
                 .antMatchers(ADMIN_ENDPOINT).permitAll()
-                .antMatchers(HttpMethod.POST, "/signin").permitAll()
-                .antMatchers("/file", "/users", "/list").authenticated()
+                //.antMatchers(HttpMethod.POST, "/signin").permitAll()
+                .antMatchers("/file", "/list").authenticated()
                 .anyRequest().authenticated()
                 .and()
+              //  .logout((logout) -> logout.logoutSuccessUrl("/login"))
+               // .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));
     }
 
@@ -70,4 +77,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         firewall.setAllowSemicolon(true);
         return firewall;
     }
+
+
 }

@@ -1,7 +1,6 @@
 package ru.netology.cloudstorage.model.entity;
 
 import lombok.*;
-import ru.netology.cloudstorage.model.entity.User.User;
 
 import javax.persistence.*;
 

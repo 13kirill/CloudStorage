@@ -1,14 +1,11 @@
 package ru.netology.cloudstorage.security.jwt;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.netology.cloudstorage.model.entity.User.User;
+import ru.netology.cloudstorage.model.entity.User;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 public class JwtUser implements UserDetails {

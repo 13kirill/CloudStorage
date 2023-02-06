@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.netology.cloudstorage.model.entity.User.User;
+import ru.netology.cloudstorage.model.entity.User;
 import ru.netology.cloudstorage.service.UserService;
 
 @Service

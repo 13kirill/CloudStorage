@@ -1,4 +1,4 @@
-package ru.netology.cloudstorage.model.entity.User;
+package ru.netology.cloudstorage.model.entity;
 
 import lombok.Data;
 import ru.netology.cloudstorage.model.entity.StoredFile;

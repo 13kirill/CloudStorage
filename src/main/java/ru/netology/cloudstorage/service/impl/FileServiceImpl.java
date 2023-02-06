@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -14,13 +13,12 @@ import ru.netology.cloudstorage.exceptions.ClientException;
 import ru.netology.cloudstorage.exceptions.ServerException;
 import ru.netology.cloudstorage.model.DTO.StoredFileDto;
 import ru.netology.cloudstorage.model.entity.StoredFile;
-import ru.netology.cloudstorage.model.entity.User.User;
+import ru.netology.cloudstorage.model.entity.User;
 import ru.netology.cloudstorage.repository.FileRepository;
 import ru.netology.cloudstorage.security.jwt.JwtUser;
 import ru.netology.cloudstorage.service.FileHashingService;
 import ru.netology.cloudstorage.service.FileService;
 import ru.netology.cloudstorage.service.FileStorageService;
-import ru.netology.cloudstorage.service.UserContextHolderService;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.File;
@@ -33,7 +31,6 @@ public class FileServiceImpl implements FileService {
     private final FileRepository fileRepository;
     private final FileStorageService fileStorageService;
     private final FileHashingService fileHashingService;
-    //private final UserContextHolderService userContextHolderService;
 
     @Override
     @Transactional
@@ -69,8 +66,8 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public MultiValueMap<String, Object> downloadFile(String filename) {
-        //todo проверяем есть ли у пользователя право смотреть файл
-        StoredFile storedFile = fileRepository.findByFilename(filename).orElseThrow(() -> new ClientException("Файл не найден"));
+        StoredFile storedFile = fileRepository.findByFilename(filename)
+                .orElseThrow(() -> new ClientException("Файл не найден"));
         File file = fileStorageService.getFile(storedFile.getFileUUID());
         String hash = fileHashingService.getHash(file);
         if (!storedFile.getHash().equals(hash)) {
