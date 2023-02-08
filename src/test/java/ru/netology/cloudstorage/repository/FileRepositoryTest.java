@@ -8,6 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import ru.netology.cloudstorage.MySqlTestContainer;
 import ru.netology.cloudstorage.model.DTO.StoredFileDto;
+import ru.netology.cloudstorage.model.entity.StoredFile;
 import ru.netology.cloudstorage.model.entity.User;
 
 import java.util.ArrayList;
@@ -26,18 +27,15 @@ class FileRepositoryTest {
     UserRepository userRepository;
 
     @BeforeAll
-    public static void init(){
+    public static void init() {
         MySqlTestContainer.container.start();
     }
 
-    @Test
-    void findByFilename() {
-    }
 
     @Test
     @Sql("classpath:TestData1.sql")
-    void findAllByUser() {
-        User user = userRepository.findByUsername("login1").orElse(null);
+    void findAllByUserSuccess() {
+        User user = userRepository.findByUsername("username1").orElse(null);
 
         List<StoredFileDto> expected = new ArrayList<>();
 
@@ -47,6 +45,15 @@ class FileRepositoryTest {
         List<StoredFileDto> result = fileRepository.findAllByUser(user);
 
         assertTrue(expected.size() == result.size() && expected.containsAll(result) && result.containsAll(expected));
+    }
 
+    @Test
+    @Sql("classpath:TestData2.sql")
+    void findAllByUserNotFound() {
+        User user = userRepository.findByUsername("username2").orElse(null);
+
+        List<StoredFileDto> result = fileRepository.findAllByUser(user);
+
+        assertEquals(0, result.size());
     }
 }
