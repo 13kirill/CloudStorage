@@ -34,6 +34,23 @@ class FileRepositoryTest {
 
     @Test
     @Sql("classpath:TestData1.sql")
+    void findByFilenameSuccess() {
+        User user = userRepository.findByUsername("username1").orElse(null);
+        StoredFile expectedStoredFile = StoredFile.builder()
+                .filename("filename1")
+                .size(10)
+                .hash("hash1")
+                .fileUUID("uuid1")
+                .user(user)
+                .build();
+
+        StoredFile resultStoredFile = fileRepository.findByFilename("filename1").orElse(null);
+
+        assertEquals(expectedStoredFile.getFilename(), resultStoredFile.getFilename());
+    }
+
+    @Test
+    @Sql("classpath:TestData1.sql")
     void findAllByUserSuccess() {
         User user = userRepository.findByUsername("username1").orElse(null);
 
