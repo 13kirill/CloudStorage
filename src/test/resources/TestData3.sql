@@ -1,11 +1,9 @@
 INSERT INTO users
-(id,
-username,
+(username,
  password,
  role)
 VALUES
-    (1,
-    'username1',
+    ('username1',
      'password1',
      'ROLE_USER');
 SET @user_id1 = LAST_INSERT_ID();

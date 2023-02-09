@@ -34,12 +34,6 @@ class FileRepositoryTest {
         MySqlTestContainer.container.start();
     }
 
-    @AfterAll
-    public static void stop() {
-        MySqlTestContainer.container.stop();
-    }
-
-
     @Test
     @Sql("classpath:TestData1.sql")
     void findByFilenameSuccess() {

@@ -27,7 +27,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    @Sql("classpath:TestData1.sql")
+    @Sql("classpath:TestData5.sql")
     void findByUsernameSuccess() {
         User expectedUser = User.builder()
                 .id(1)
@@ -38,7 +38,7 @@ class UserRepositoryTest {
 
         User resultUser = userRepository.findByUsername("username1").orElse(null);
 
-        assertEquals(expectedUser.getUsername(), resultUser.getUsername());
+        assertThat(resultUser).usingRecursiveComparison().ignoringFields("id", "storedFiles").isEqualTo(expectedUser);
     }
 
     @Test
@@ -48,9 +48,5 @@ class UserRepositoryTest {
         User resultUser = userRepository.findByUsername("username1").orElse(null);
 
         assertEquals(null, resultUser);
-    }
-
-    @Test
-    void findUserByUsername() {
     }
 }
