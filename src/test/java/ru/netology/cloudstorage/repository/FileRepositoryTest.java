@@ -1,5 +1,7 @@
 package ru.netology.cloudstorage.repository;
 
+import org.junit.Before;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import ru.netology.cloudstorage.model.DTO.StoredFileDto;
 import ru.netology.cloudstorage.model.entity.StoredFile;
 import ru.netology.cloudstorage.model.entity.User;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +30,13 @@ class FileRepositoryTest {
     UserRepository userRepository;
 
     @BeforeAll
-    public static void init() {
+    public static void start() {
         MySqlTestContainer.container.start();
+    }
+
+    @AfterAll
+    public static void stop() {
+        MySqlTestContainer.container.stop();
     }
 
 
@@ -50,7 +58,16 @@ class FileRepositoryTest {
     }
 
     @Test
-    @Sql("classpath:TestData1.sql")
+    @Sql("classpath:TestData2.sql")
+    void findByFilenameNotFound() {
+
+        StoredFile resultStoredFile = fileRepository.findByFilename("filename2").orElse(null);
+
+        assertEquals(null, resultStoredFile);
+    }
+
+    @Test
+    @Sql("classpath:TestData3.sql")
     void findAllByUserSuccess() {
         User user = userRepository.findByUsername("username1").orElse(null);
 
@@ -65,7 +82,7 @@ class FileRepositoryTest {
     }
 
     @Test
-    @Sql("classpath:TestData2.sql")
+    @Sql("classpath:TestData4.sql")
     void findAllByUserNotFound() {
         User user = userRepository.findByUsername("username2").orElse(null);
 

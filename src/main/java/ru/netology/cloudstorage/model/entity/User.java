@@ -1,6 +1,9 @@
 package ru.netology.cloudstorage.model.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.netology.cloudstorage.model.entity.StoredFile;
 
 import javax.persistence.*;
@@ -9,6 +12,9 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @Id
