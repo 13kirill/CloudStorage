@@ -41,7 +41,7 @@ class FileServiceImplTest {
 
     static JwtUser testJwtUser;
 
-    @BeforeClass
+    @BeforeAll
     public static void setData() {
         testUser = User.builder()
                 .username("test")
