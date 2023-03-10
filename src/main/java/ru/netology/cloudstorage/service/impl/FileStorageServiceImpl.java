@@ -42,7 +42,8 @@ public class FileStorageServiceImpl implements FileStorageService {
     public String saveFile(MultipartFile multipartFile) {
         String uuid = UUID.randomUUID().toString();
         try {
-            Path path = Files.createFile(Paths.get(fileStorageDir, uuid));
+            Path path = Files
+                    .createFile(Paths.get("D:/Programming/CLOUD", uuid));
             multipartFile.transferTo(path);
 
         } catch (IOException e) {
@@ -79,7 +80,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     @Override
     public File getFile(String uuid) {
-        Path path = Paths.get(fileStorageDir, uuid);
+        Path path = Paths.get("D:/Programming/CLOUD", uuid);
         validateFile(path);
         return path.toFile();
     }

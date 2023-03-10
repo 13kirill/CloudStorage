@@ -18,7 +18,7 @@ import java.util.List;
 @Validated
 public class FileController {
 
-    private FileService fileService;
+    private final FileService fileService;
 
     @PostMapping("/file")
     public void uploadFileToServer(@RequestHeader("auth-token") String authToken,

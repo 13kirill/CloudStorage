@@ -5,17 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import ru.netology.cloudstorage.model.DTO.LoginRequestDTO;
 import ru.netology.cloudstorage.security.jwt.JwtTokenProvider;
 import ru.netology.cloudstorage.service.UserService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,13 +23,10 @@ public class AuthenticationController {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    private final UserService userService;
-
     @Autowired
     public AuthenticationController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
-        this.userService = userService;
     }
 
     @PostMapping("/login")
@@ -52,20 +46,6 @@ public class AuthenticationController {
             throw new BadCredentialsException("Invalid username or password");
         }
     }
-
-//    @PostMapping("/logout")
-//    public ResponseEntity logout(@RequestHeader("auth-token") String authToken) {
-//        return (ResponseEntity) ResponseEntity.ok();
-//    }
-
-//    @RequestMapping(value="/logout", method = RequestMethod.POST)
-//    public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (auth != null){
-//            new SecurityContextLogoutHandler().logout(request, response, auth);
-//        }
-//        return "redirect:/login?logout"; //You can redirect wherever you want, but generally it's a good practice to show login screen again.
-//    }
 
     @PostMapping("/logout")
     public ResponseEntity logout() {
