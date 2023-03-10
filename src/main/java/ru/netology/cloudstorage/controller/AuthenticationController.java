@@ -23,13 +23,10 @@ public class AuthenticationController {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    private final UserService userService;
-
     @Autowired
     public AuthenticationController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
-        this.userService = userService;
     }
 
     @PostMapping("/login")

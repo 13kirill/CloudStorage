@@ -1,11 +1,15 @@
+
 INSERT INTO users
-(username,
+(id,
+username,
  password,
  role)
 VALUES
-    ('username2',
-     'password2',
+    (4,
+    'username4',
+     'password4',
      'ROLE_USER');
+     SET @user_id4 = LAST_INSERT_ID();
 INSERT INTO stored_file
 (filename,
  size,
@@ -13,8 +17,8 @@ INSERT INTO stored_file
  fileUUID,
  user_id)
 VALUES
-    ('filename1',
+    ('filename4',
      10,
-     'hash1',
-     'uuid1',
-     @user_id1);
+     'hash4',
+     'uuid4',
+     4);

@@ -1,3 +1,4 @@
+
 INSERT INTO users
 (id,
 username,
@@ -20,7 +21,7 @@ VALUES
      10,
      'hash1',
      'uuid1',
-     @user_id1);
+     1);
 INSERT INTO stored_file
 (filename,
  size,
@@ -28,8 +29,8 @@ INSERT INTO stored_file
  fileUUID,
  user_id)
 VALUES
-    ('filename2',
+    ('filename11',
      15,
-     'hash2',
-     'uuid2',
-     @user_id1);
+     'hash11',
+     'uuid11',
+     1);

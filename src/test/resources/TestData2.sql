@@ -1,9 +1,12 @@
+
 INSERT INTO users
-(username,
+(id,
+username,
  password,
  role)
 VALUES
-    ('username2',
+    (2,
+    'username2',
      'password2',
      'ROLE_USER');
 INSERT INTO stored_file
@@ -13,8 +16,8 @@ INSERT INTO stored_file
  fileUUID,
  user_id)
 VALUES
-    ('filename1',
+    ('filename2',
      10,
-     'hash1',
-     'uuid1',
-     @user_id1);
+     'hash2',
+     'uuid2',
+     2);

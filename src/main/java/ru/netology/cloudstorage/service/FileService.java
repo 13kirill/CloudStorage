@@ -4,6 +4,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 import ru.netology.cloudstorage.model.DTO.StoredFileDto;
+import ru.netology.cloudstorage.model.entity.StoredFile;
 
 import java.util.List;
 
@@ -20,10 +21,12 @@ public interface FileService {
 
     /**
      * Метод добавляет файл в БД.
+     *
      * @param fileName имя файла
-     * @param file ???
+     * @param file     ???
+     * @return
      */
-    void uploadFile(@NonNull String fileName, @NonNull MultipartFile file);
+    StoredFile uploadFile(@NonNull String fileName, @NonNull MultipartFile file);
 
     /**
      * ???

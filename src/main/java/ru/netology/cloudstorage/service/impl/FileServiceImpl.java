@@ -42,26 +42,28 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void uploadFile(String filename, MultipartFile multipartFile) {
+    public StoredFile uploadFile(String filename, MultipartFile multipartFile) {
         String uuid = fileStorageService.saveFile(multipartFile);
         File file = fileStorageService.getFile(uuid);
         String hash;
         User currentUser;
+        StoredFile storedFile;
         try {
             currentUser = getCurrentUser();
             hash = fileHashingService.getHash(file);
-            StoredFile storedFile = StoredFile.builder()
+            storedFile = StoredFile.builder()
                     .filename(filename)
                     .user(currentUser)
                     .hash(hash)
                     .fileUUID(uuid)
                     .size(file.length())
                     .build();
-            fileRepository.save(storedFile);
+
         } catch (ServerException | ClientException | DataAccessException ex) {
             fileStorageService.deleteFile(uuid);
             throw ex;
         }
+        return fileRepository.save(storedFile);
     }
 
     @Override

@@ -1,8 +1,11 @@
+
 INSERT INTO users
-(username,
+(id,
+username,
  password,
  role)
 VALUES
-    ('username1',
-     'password1',
+    (5,
+    'username5',
+     'password5',
      'ROLE_USER');

@@ -3,17 +3,16 @@ package ru.netology.cloudstorage.security.jwt;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.Base64;
+import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
@@ -26,11 +25,7 @@ public class JwtTokenProvider {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Bean
-    BCryptPasswordEncoder bCryptPasswordEncoder() {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        return bCryptPasswordEncoder;
-    }
+
 
     @PostConstruct
     protected void init() {
@@ -44,7 +39,6 @@ public class JwtTokenProvider {
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()
-                //.claim("username", username)
                 .setSubject(username)
                 .setIssuedAt(now)
                 .setExpiration(validity)
@@ -84,12 +78,4 @@ public class JwtTokenProvider {
             throw new JwtAuthenticationException("JWT token is expired or invalid");
         }
     }
-
-//    private List<String> getRoleNames(List<Role> roleList) {
-//        List<String> result = new ArrayList<>();
-//        roleList.forEach(role -> {
-//            result.add(role.getName());
-//        });
-//        return result;
-//    }
 }

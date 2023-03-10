@@ -23,6 +23,7 @@ public interface FileStorageService {
      */
     String saveFile(@NonNull MultipartFile multipartFile);
 
+
     /**
      * @param id идентификационный номер файла.
      * @throws IOException если файл с указаным id не найден.

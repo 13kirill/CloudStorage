@@ -1,7 +1,6 @@
 package ru.netology.cloudstorage.repository;
 
-import org.junit.Before;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +12,14 @@ import ru.netology.cloudstorage.model.DTO.StoredFileDto;
 import ru.netology.cloudstorage.model.entity.StoredFile;
 import ru.netology.cloudstorage.model.entity.User;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(initializers = {MySqlTestContainer.Initializer.class
-})
+@ContextConfiguration(initializers = {MySqlTestContainer.Initializer.class})
 class FileRepositoryTest {
 
     @Autowired
@@ -32,6 +30,12 @@ class FileRepositoryTest {
     @BeforeAll
     public static void start() {
         MySqlTestContainer.container.start();
+    }
+
+    @AfterEach
+    public void deleteData(){
+        fileRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
@@ -55,7 +59,7 @@ class FileRepositoryTest {
     @Sql("classpath:TestData2.sql")
     void findByFilenameNotFound() {
 
-        StoredFile resultStoredFile = fileRepository.findByFilename("filename2").orElse(null);
+        StoredFile resultStoredFile = fileRepository.findByFilename("filename").orElse(null);
 
         assertEquals(null, resultStoredFile);
     }
@@ -63,12 +67,12 @@ class FileRepositoryTest {
     @Test
     @Sql("classpath:TestData3.sql")
     void findAllByUserSuccess() {
-        User user = userRepository.findByUsername("username1").orElse(null);
+        User user = userRepository.findByUsername("username3").orElse(null);
 
         List<StoredFileDto> expected = new ArrayList<>();
 
-        expected.add(new StoredFileDto("filename1", 10));
-        expected.add(new StoredFileDto("filename2", 15));
+        expected.add(new StoredFileDto("filename3", 10));
+        expected.add(new StoredFileDto("filename33", 15));
 
         List<StoredFileDto> result = fileRepository.findAllByUser(user);
 
@@ -78,7 +82,7 @@ class FileRepositoryTest {
     @Test
     @Sql("classpath:TestData4.sql")
     void findAllByUserNotFound() {
-        User user = userRepository.findByUsername("username2").orElse(null);
+        User user = userRepository.findByUsername("username").orElse(null);
 
         List<StoredFileDto> result = fileRepository.findAllByUser(user);
 
